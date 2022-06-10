@@ -3,19 +3,18 @@
 from selenium import webdriver
 import json
 import time
-
-print ("hekko")
-
+import random
 from selenium.webdriver.chrome.service import Service
 import os
 
+
 #
-driver = webdriver.Chrome()
-driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
-time.sleep(60)
-cookies = driver.get_cookies()
-with open("qrsncookies.txt", "w") as fp:
-    json.dump(cookies, fp)
+# driver = webdriver.Chrome()
+# driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
+# time.sleep(60)
+# cookies = driver.get_cookies()
+# with open("qrsncookies.txt", "w") as fp:
+#     json.dump(cookies, fp)
 # # https://twitter.com/login
 
 # option = webdriver.FirefoxOptions()
@@ -37,15 +36,15 @@ def read_cookies():
     c_service.command_line_args()
     c_service.start()
 
-    #chrome
+    # chrome
     option = webdriver.ChromeOptions()
     # option.set_headless()
-    option.add_argument("--headless")
-    option.add_argument("--no-sandbox")
+    # option.add_argument("--headless")
+    # option.add_argument("--no-sandbox")
     driver = webdriver.Chrome(chrome_options=option)
     # driver = webdriver.Chrome()
 
-    #firefox
+    # firefox
     # option = webdriver.FirefoxOptions()
     # # option.add_argument("headless")
     # # option.add_argument('--no-sandbox')
@@ -61,56 +60,62 @@ def read_cookies():
             driver.add_cookie(cookie)
 
     driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
-    print (driver.title)
-    time.sleep(20)
+    print(driver.title)
+    time.sleep(10)
     return driver, c_service
 
-def publishing(list):
+
+def publishing():
     driver, c_service = read_cookies()
-    # time.sleep(10)
-    # print(list)
-    # driver.find_element_by_xpath('//*[@id="global-new-tweet-button"]').click()
-    # '//*[@id="thread_list"]/li[2]/div/div[2]/div[1]/div[1]/a'
-    driver.find_element_by_xpath('//*[@id="thread_list"]/li[2]/div/div[2]/div[1]/div[1]/a').click()
-    print("click first article")
-    time.sleep(10)
-    driver.find_element_by_xpath('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div[2]/div').send_keys(list[0])
-    print("send text")
-    time.sleep(10)
-    lenth = len(list)
-    for lis in list[1:lenth]:
-        lis = lis.strip()
-        if lis is None:
-            break
-
-        # driver.find_element_by_xpath(
-        #     '//*[@id="Tweetstorm-tweet-box-0"]/div[2]/div[2]/div[1]/span[1]/div/div/label/input').send_keys(
-        #     "/home/centos/shell/tianxiubot/" + lis)
-        driver.find_element_by_xpath(
-            '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[1]/input').send_keys(
-            "/home/centos/shell/tianxiubot/" + lis)
-        # print("click publish")
-        # /home/centos/shell/tianxiubot/
-        # E:\work\\twbot\\tianxiubot\\
-        # print(lis)
+    opened_url = []
+    while True:
+        driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
+        time.sleep(5)
+        article_url = driver.find_element_by_xpath('//*[@id="thread_list"]/li[2]/div/div[2]/div[1]/div[1]/a').get_attribute(
+            'href')
+        if article_url in opened_url:
+            time.sleep(20)
+            continue
+        opened_url.append(article_url)
+        print(opened_url)
+        driver.get(article_url)
+        time.sleep(3)
+        print(driver.title)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        edit_area = driver.find_element_by_xpath('//*[@id="ueditor_replace"]')
         time.sleep(1)
-    print("send pics")
-    time.sleep(1)
-    # driver.find_element_by_xpath('//*[@id="Tweetstorm-tweet-box-0"]/div[2]/div[2]/div[2]/span/button[2]').click()
-    #driver.find_element_by_xpath('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[4]/div/div/div[2]/div[4]/div').click()
-    pub_button = driver.find_element_by_xpath('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]')
-    driver.execute_script("arguments[0].click();", pub_button)
+        it = random.randint(0, len(lis))
+        print(lis[it])
+        edit_area.send_keys(lis[it])
+        print("send text")
+        time.sleep(2)
+        pub_button = driver.find_element_by_xpath('//*[@id="tb_rich_poster"]/div[3]/div[3]/div/a/span/em')
+        driver.execute_script("arguments[0].click();", pub_button)
+        print("click publish")
 
-    print("click publish")
-    time.sleep(30)
-    driver.quit()
-    c_service.stop()
-    os.system('bash killchrome.sh')
+        time.sleep(30)
+        # driver.quit()
+        # c_service.stop()
+
 
 def publish(list):
     try:
         publishing(list)
     except Exception as e:
-        os.system('bash killchrome.sh')
         print("publishing error")
         print(e)
+
+
+
+lis = ['说的好，老哥，来群里水水经验吧 777344078',
+       'hahahah,我觉得这游戏比LOL好玩多了。暗黑2欢乐裙 777344078 快来van。',
+       '兄弟，有装备要卖的吗，来群 777344078，找群主，高价收。',
+       '老哥有点东西啊，来群，咱们一起玩啊。777344078',
+       '高价回收装备，极品装备，来群围观 777344078',
+       '点一下，van一年，装逼不花一分钱，来群一起搞吧 777344078',
+       '不会玩，可以来群里，热心老哥，亲情解答 777344078',
+       '滴滴，来这群777344078，经常有老哥开升级车，偷渡车。']
+
+
+
+publishing()

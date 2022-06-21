@@ -69,32 +69,35 @@ def publishing():
     driver, c_service = read_cookies()
     opened_url = []
     while True:
-        driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
-        time.sleep(5)
-        article_url = driver.find_element_by_xpath('//*[@id="thread_list"]/li[2]/div/div[2]/div[1]/div[1]/a').get_attribute(
-            'href')
-        if article_url in opened_url:
-            time.sleep(20)
-            continue
-        opened_url.append(article_url)
-        print(opened_url)
-        driver.get(article_url)
-        time.sleep(3)
-        print(driver.title)
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        edit_area = driver.find_element_by_xpath('//*[@id="ueditor_replace"]')
-        time.sleep(1)
-        it = random.randint(0, len(lis))
-        print(lis[it])
-        edit_area.send_keys(lis[it])
-        print("send text")
-        time.sleep(2)
-        pub_button = driver.find_element_by_xpath('//*[@id="tb_rich_poster"]/div[3]/div[3]/div/a/span/em')
-        driver.execute_script("arguments[0].click();", pub_button)
-        print("click publish")
+        try:
+            driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
+            time.sleep(5)
+            article_url = driver.find_element_by_xpath('//*[@id="thread_list"]/li[2]/div/div[2]/div[1]/div[1]/a').get_attribute(
+                'href')
+            if article_url in opened_url:
+                time.sleep(60)
+                continue
+            opened_url.append(article_url)
+            print(opened_url)
+            driver.get(article_url)
+            time.sleep(3)
+            print(driver.title)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            edit_area = driver.find_element_by_xpath('//*[@id="ueditor_replace"]')
+            time.sleep(1)
+            it = random.randint(0, len(lis))
+            print(lis[it])
+            edit_area.send_keys(lis[it])
+            print("send text")
+            time.sleep(2)
+            pub_button = driver.find_element_by_xpath('//*[@id="tb_rich_poster"]/div[3]/div[3]/div/a/span/em')
+            driver.execute_script("arguments[0].click();", pub_button)
+            print("click publish")
 
-        time.sleep(30)
-        # driver.quit()
+            time.sleep(60)
+        except Exception as e:
+            print(e)
+            # driver.quit()
         # c_service.stop()
 
 

@@ -36,28 +36,45 @@ def main():
     # if consoleWindow:
     #     consoleWindow.SetActive()
     # qqWindow = listItem.GetTopLevelControl()
-    qqWindow = auto.WindowControl(searchDepth=1, Name='暗黑2重制版交易交流')
+    qqWindow = auto.WindowControl(searchDepth=1, Name='暗黑2重置斗鱼直播拍卖群（天尽头）')
     qqWindow.SetActive()
-    memberList = qqWindow.ListControl(searchDepth=18, Name='成员列表').ListControl(searchDepth=1, Name="")
-    print(memberList.ControlType)
-    for item in memberList.GetChildren()[10:]:
-        print(item.Name)
-        person = memberList.ListItemControl(searchDepth=1, Name=item.Name)
-        time.sleep(1)
-        item.Click()
-        time.sleep(0.1)
-        person.SendKey(0x0D, 0.1)
-        time.sleep(0.5)
-        # person.WheelDown()
-        # time.sleep(0.5)
-        curTab = qqWindow.TabItemControl(searchDepth=10, Name=item.Name)
-        curTab.RightClick()
-        time.sleep(0.5)
-        for i in range(1, 7):
-            curTab.SendKey(0x28, 0.1)
+    for k in range(1, 100):
+        print(k)
+        for j in range(1, 17):
+            qqWindow.SendKey(0x09)  # tab
+            time.sleep(0.2)
 
-        curTab.SendKey(0x0D, 0.1)
-        time.sleep(3)
+        qqWindow.SendKey(0x28, 0.1)  # down暗黑2重置版讨论区
+        qqWindow.SendKey(0x0D, 0.1)  # enter
+        # send keys in edit
+        qqWindow.SendKeys('老哥好，来加入暗黑2大家庭吧，点击链接加群：https://jq.qq.com/?_wv=1027&k=HXqsC14c{ENTER}')
+        time.sleep(1)
+        qqWindow.RightClick(x=170, y=160)
+        for i in range(1, 4):
+            qqWindow.SendKey(0x28, 0.1)
+        qqWindow.SendKey(0x0D, 0.1)
+        time.sleep(1)
+
+    # memberList = qqWindow.ListControl(searchDepth=18, Name='成员列表').ListControl(searchDepth=1, Name="")
+    # print(memberList.ControlType)
+    # for item in memberList.GetChildren()[10:]:
+    #     print(item.Name)
+    #     person = memberList.ListItemControl(searchDepth=1, Name=item.Name)
+    #     time.sleep(1)
+    #     item.Click()
+    #     time.sleep(0.1)
+    #     person.SendKey(0x0D, 0.1)
+    #     time.sleep(0.5)
+    #     # person.WheelDown()
+    #     # time.sleep(0.5)
+    #     curTab = qqWindow.TabItemControl(searchDepth=10, Name=item.Name)
+    #     curTab.RightClick()
+    #     time.sleep(0.5)
+    #     for i in range(1, 7):
+    #         curTab.SendKey(0x28, 0.1)
+    #
+    #     curTab.SendKey(0x0D, 0.1)
+    #     time.sleep(3)
 
     # list = listItem.GetParentControl()
     # allListItems = list.GetChildren()
@@ -103,4 +120,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    input('press Enter to exit')

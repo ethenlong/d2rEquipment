@@ -42,18 +42,18 @@ def main():
         print(k)
         for j in range(1, 17):
             qqWindow.SendKey(0x09)  # tab
-            time.sleep(0.2)
+            time.sleep(0.3)
 
         qqWindow.SendKey(0x28, 0.1)  # down暗黑2重置版讨论区
         qqWindow.SendKey(0x0D, 0.1)  # enter
         # send keys in edit
         qqWindow.SendKeys('老哥好，来加入暗黑2大家庭吧，点击链接加群：https://jq.qq.com/?_wv=1027&k=HXqsC14c{ENTER}')
-        time.sleep(1)
+        time.sleep(2)
         qqWindow.RightClick(x=170, y=160)
         for i in range(1, 4):
             qqWindow.SendKey(0x28, 0.1)
         qqWindow.SendKey(0x0D, 0.1)
-        time.sleep(1)
+        time.sleep(3)
 
     # memberList = qqWindow.ListControl(searchDepth=18, Name='成员列表').ListControl(searchDepth=1, Name="")
     # print(memberList.ControlType)

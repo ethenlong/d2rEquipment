@@ -51,7 +51,7 @@ def read_cookies():
     # option.set_headless()
     # driver = webdriver.Firefox(firefox_options=option)
 
-    driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
+    driver.get("https://tieba.baidu.com/f?ie=utf-8&kw=%E6%9A%97%E9%BB%912")
     with open("qrsncookies.txt", "r") as fp:
         cookies = json.load(fp)
         for cookie in cookies:
@@ -59,7 +59,7 @@ def read_cookies():
                 del cookie['expiry']
             driver.add_cookie(cookie)
 
-    driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
+    driver.get("https://tieba.baidu.com/f?ie=utf-8&kw=%E6%9A%97%E9%BB%912")
     print(driver.title)
     time.sleep(10)
     return driver, c_service
@@ -70,7 +70,7 @@ def publishing():
     opened_url = []
     while True:
         try:
-            driver.get("https://tieba.baidu.com/f?kw=%B0%B5%BA%DA2")
+            driver.get("https://tieba.baidu.com/f?ie=utf-8&kw=%E6%9A%97%E9%BB%912")
             time.sleep(5)
             article_url = driver.find_element_by_xpath('//*[@id="thread_list"]/li[2]/div/div[2]/div[1]/div[1]/a').get_attribute(
                 'href')
@@ -85,9 +85,9 @@ def publishing():
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             edit_area = driver.find_element_by_xpath('//*[@id="ueditor_replace"]')
             time.sleep(1)
-            it = random.randint(0, len(lis))
-            print(lis[it])
-            edit_area.send_keys(lis[it])
+            # it = random.randint(0, len(lis2))
+            # print(lis2[it])
+            edit_area.send_keys(lis2[0])
             print("send text")
             time.sleep(2)
             pub_button = driver.find_element_by_xpath('//*[@id="tb_rich_poster"]/div[3]/div[3]/div/a/span/em')
@@ -118,6 +118,7 @@ lis = ['说的好，老哥，来群里水水经验吧 777344078',
        '点一下，van一年，装逼不花一分钱，来群一起搞吧 777344078',
        '不会玩，可以来群里，热心老哥，亲情解答 777344078',
        '滴滴，来这群777344078，经常有老哥开升级车，偷渡车。']
+lis2 = ['欢迎来群里，一起交流一起玩 777344078']
 
 
 
